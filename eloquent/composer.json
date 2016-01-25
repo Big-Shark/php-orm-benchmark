@@ -1,0 +1,9 @@
+{
+    "require": {
+        "illuminate/database": "~5.1",
+        "illuminate/events": "~5.1"
+    },
+    "autoload": {
+        "classmap": ["models/"]
+    }
+}

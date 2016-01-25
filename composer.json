@@ -1,0 +1,21 @@
+{
+  "name": "big-shark/php-orm-benchmark",
+  "description": "php ORM benchmark",
+  "keywords": ["PHP", "ODM", "benchmark"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Maxim AKA Big_Shark",
+      "email": "bigshark666@gmail.com"
+    }
+  ],
+  "require": {
+    "symfony/console" : "~3.0",
+    "symfony/process" : "~3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "BigShark\\ORMBenchmark\\": "src"
+    }
+  }
+}

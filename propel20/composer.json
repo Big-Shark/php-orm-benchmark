@@ -1,0 +1,9 @@
+{
+  "require": {
+    "propel/propel": "dev-master"
+  },
+  "autoload": {
+    "classmap": ["generated-classes/"],
+    "files": ["generated-conf/config.php"]
+  }
+}
