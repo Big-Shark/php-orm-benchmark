@@ -1,6 +1,6 @@
 <?php
 
-namespace pdo;
+namespace yii2;
 
 use BigShark\ORMBenchmark\AbstractTest;
 
