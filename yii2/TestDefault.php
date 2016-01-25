@@ -6,78 +6,75 @@ use BigShark\ORMBenchmark\AbstractTest;
 
 class TestDefault extends AbstractTest
 {
-
-    /**
-     * @var \PDO
-     */
-    protected $con;
-
     public function getName()
     {
-        return 'PDO';
+        return 'Yii2';
     }
 
     public function initialization()
     {
-        $this->con = new \PDO($_ENV['dsn'], $_ENV['username'], $_ENV['password']);
+        defined('YII_DEBUG') or define('YII_DEBUG', true);
+        defined('YII_ENV') or define('YII_ENV', 'dev');
+
+        require(__DIR__ . '/vendor/autoload.php');
+        require(__DIR__ . '/vendor/yiisoft/yii2/Yii.php');
+
+        (new \yii\console\Application([
+            'id' => 'testapp',
+            'basePath' => __DIR__,
+            'vendorPath' => __DIR__ . '/vendor/',
+            'components' => [
+                'db' => [
+                    'class' => 'yii\db\Connection',
+                    'dsn' => $_ENV['dsn'],
+                    'username' => $_ENV['username'],
+                    'password' => $_ENV['password'],
+                    'charset' => 'utf8',
+                ],
+            ]
+
+        ]));
     }
 
     function authorInsertion($firstName, $lastName)
     {
-        $query = 'INSERT INTO author (first_name, last_name) VALUES (?, ?)';
-        $stmt = $this->con->prepare($query);
-        $stmt->bindParam(1, $firstName);
-        $stmt->bindParam(2, $lastName);
-        $stmt->execute();
-        $author = [
-            'id' => $this->con->lastInsertId(),
-            'firstName' => $firstName,
-            'lastName' => $lastName,
-        ];
+        $author = new \Author();
+        $author->setFirstName($firstName);
+        $author->setLastName($lastName);
+        $author->save();
         return $author;
     }
 
     function authorInsertionTest($firstName, $lastName)
     {
         $author = $this->authorInsertion($firstName, $lastName);
-        return $author['id'];
+        return $author->getId();
     }
 
     function bookInsertion($title, $ISBN, $author)
     {
-        $query = 'INSERT INTO book (title, isbn, author_id) VALUES (?, ?, ?)';
-        $stmt = $this->con->prepare($query);
-        $stmt->bindParam(1, $title);
-        $stmt->bindParam(2, $ISBN);
-        $stmt->bindParam(3, $author['id'], \PDO::PARAM_INT);
-        $stmt->execute();
-        $book = [
-            'id' => $this->con->lastInsertId(),
-            'title' => $title,
-            'isbn' => $ISBN,
-            'author' => $author,
-        ];
+        $book = new \Book();
+        $book->setTitle($title);
+        $book->setISBN($ISBN);
+        $book->link('Author', $author);
+        $book->save();
         return $book;
     }
 
     function bookInsertionTest($title, $ISBN, $author)
     {
         $book = $this->bookInsertion($title, $ISBN, $author);
-        return $book['id'];
+        return $book->getId();
     }
 
     public function findByPk($id)
     {
-        $query = 'SELECT author.id, author.first_name, author.last_name FROM author WHERE author.id = ? LIMIT 1';
-        $stmt = $this->con->prepare($query);
-        $stmt->bindParam(1, $id, \PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+        return \Author::findOne($id);
     }
 
     public function findByPkTest($id)
     {
         $author = $this->findByPk($id);
-        return $author['id'];
+        return $author->getId();
     }
 }
