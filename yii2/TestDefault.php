@@ -19,28 +19,35 @@ class TestDefault extends AbstractTest
         require(__DIR__ . '/vendor/autoload.php');
         require(__DIR__ . '/vendor/yiisoft/yii2/Yii.php');
 
-        (new \yii\console\Application([
-            'id' => 'testapp',
-            'basePath' => __DIR__,
-            'vendorPath' => __DIR__ . '/vendor/',
-            'components' => [
-                'db' => [
-                    'class' => 'yii\db\Connection',
-                    'dsn' => $_ENV['dsn'],
-                    'username' => $_ENV['username'],
-                    'password' => $_ENV['password'],
-                    'charset' => 'utf8',
-                ],
-            ]
+        (
+        new \yii\console\Application(
+            [
+                'id' => 'testapp',
+                'basePath' => __DIR__,
+                'vendorPath' => __DIR__ . '/vendor/',
+                'components' => [
+                    'db' => [
+                        'class' => 'yii\db\Connection',
+                        'dsn' => $_ENV['dsn'],
+                        'username' => $_ENV['username'],
+                        'password' => $_ENV['password'],
+                        'charset' => 'utf8',
+                    ],
+                ]
 
-        ]));
+            ]
+        )
+        );
     }
 
     function authorInsertion($firstName, $lastName)
     {
-        $author = new \Author();
-        $author->setFirstName($firstName);
-        $author->setLastName($lastName);
+        $author = new \Author(
+            [
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+            ]
+        );
         $author->save();
         return $author;
     }
@@ -53,10 +60,13 @@ class TestDefault extends AbstractTest
 
     function bookInsertion($title, $ISBN, $author)
     {
-        $book = new \Book();
-        $book->setTitle($title);
-        $book->setISBN($ISBN);
-        $book->link('Author', $author);
+        $book = new \Book(
+            [
+                'title' => $title,
+                'isbn' => $ISBN,
+            ]
+        );
+        $book->link('author', $author);
         $book->save();
         return $book;
     }

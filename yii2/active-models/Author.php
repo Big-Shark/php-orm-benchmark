@@ -4,7 +4,9 @@ class Author extends \yii\db\ActiveRecord
 {
     public function rules()
     {
-        return [['first_name', 'last_name'], 'safe'];
+        return [
+            [['first_name', 'last_name'], 'safe'],
+        ];
     }
 
     public function getBooks()
