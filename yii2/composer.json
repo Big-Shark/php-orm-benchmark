@@ -1,0 +1,10 @@
+{
+  "require": {
+    "yiisoft/yii2": "dev-master"
+  },
+  "autoload": {
+    "classmap": [
+      "active-models/"
+    ]
+  }
+}

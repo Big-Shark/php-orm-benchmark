@@ -21,14 +21,14 @@ class TestDefault extends AbstractTest
 
     public function initialization()
     {
-        $capsule = new Manager() ;
+        $capsule = new Manager();
 
         $capsule->addConnection([
             'driver'    => $_ENV['driver'],
             'host'      => $_ENV['host'],
             'database'  => $_ENV['database'],
             'username'  => $_ENV['username'],
-            'password'  => $_ENV['password'],
+            'password'  => isset($_ENV['password']) ? $_ENV['password'] : '',
             'port'      => $_ENV['port'],
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
